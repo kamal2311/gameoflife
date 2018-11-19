@@ -48,29 +48,34 @@ public class World {
 		
 		Set<Position> nextgenAlivePositions = new HashSet<>();
 		
-		for(Position liveCell: alivePositions) {
+		for(Position livePosition: alivePositions) {
 			
-			for (Position neighbor: liveCell.neighbors()) {
+			for (Position position: livePosition.neighbors()) {
 				
-				if (!examinedSoFar.contains(neighbor)) {
-					
-					if(willSpringToLife(neighbor)) {
-						nextgenAlivePositions.add(neighbor);
-					}
-					
-					if(isAliveAt(neighbor) && !willCellDieAt(neighbor)) {
-						nextgenAlivePositions.add(neighbor);
-					}					
-					
-				}
-				
-				examinedSoFar.add(neighbor);
+				examinePosition(examinedSoFar, nextgenAlivePositions, position);
 				
 			}
 			
 		}
 		
 		return new World(nextgenAlivePositions);
+	}
+
+	private void examinePosition(Set<Position> examinedSoFar, Set<Position> nextgenAlivePositions, Position position) {
+		
+		if (!examinedSoFar.contains(position)) {
+			
+			if(willSpringToLife(position)) {
+				nextgenAlivePositions.add(position);
+			}
+			
+			if(isAliveAt(position) && !willCellDieAt(position)) {
+				nextgenAlivePositions.add(position);
+			}					
+			
+		}
+		
+		examinedSoFar.add(position);
 	}
 
 
