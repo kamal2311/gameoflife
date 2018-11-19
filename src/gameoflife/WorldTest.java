@@ -127,9 +127,11 @@ public class WorldTest {
 		// 1 0 1 1
 		// 0 0 0 1
 				
-		World world = setupWorld();
+		World world = setupWorld();		
+		System.out.println(world);
 		
 		World nextGenWorld = world.nextGeneration();
+		System.out.println(nextGenWorld);
 		
 		// 0 | 0 0 1 0 | 0
 	    // --------------------- 
