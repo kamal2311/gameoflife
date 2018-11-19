@@ -7,14 +7,17 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-public class WorldTest {
-
-	
+public class WorldTest {	
 
 	@Test
 	public void should_initialize() throws Exception {
+		
+		Collection<Position> livePositions = new ArrayList<>();
 
-		World world = new World();
+		livePositions.add(Position.withXY(0, 1));
+		livePositions.add(Position.withXY(0, 2));
+
+		World world = World.withLivePositions(livePositions);
 		assertThat(world).isNotNull();
 
 	}
@@ -48,7 +51,7 @@ public class WorldTest {
 		livePositions.add(Position.withXY(2, 3));
 		
 				
-		World world = new World(livePositions);
+		World world = World.withLivePositions(livePositions);
 		return world;
 	}
 
@@ -65,9 +68,9 @@ public class WorldTest {
 	@Test
 	public void should_be_able_to_report_if_a_cell_is_not_alive_at_a_position() throws Exception {
 
-		World world = new World();
+		World world = setupWorld();
+		
 		Position nonAlivePosition = Position.withXY(0, 0);
-
 		assertThat(world.isAliveAt(nonAlivePosition)).isFalse();
 	}
 	
@@ -77,7 +80,7 @@ public class WorldTest {
 
 		World world = setupWorld();
 
-		assertThat(world.willCellDieAt(Position.withXY(1, 0))).isTrue();
+		assertThat(world.willDieAt(Position.withXY(1, 0))).isTrue();
 		
 
 	}
@@ -85,10 +88,10 @@ public class WorldTest {
 	@Test
 	public void should_answer_if_a_live_cell_will_die_due_to_overpopulation_in_next_gen() throws Exception {
 
-		World world = setupWorld();
+		World world = setupWorld();		
 		Position overcrowdedPosition = Position.withXY(1, 2);
 		
-		assertThat(world.willCellDieAt(overcrowdedPosition)).isTrue();
+		assertThat(world.willDieAt(overcrowdedPosition)).isTrue();
 
 	}
 
@@ -96,11 +99,10 @@ public class WorldTest {
 	public void should_answer_if_a_live_cell_will_survive_in_next_gen() throws Exception {
 
 
-		World world = setupWorld();
+		World world = setupWorld();		
+		Position stablePosition = Position.withXY(0, 3);
 		
-		Position stableCell = Position.withXY(0, 3);
-		
-		assertThat(world.willCellDieAt(stableCell)).isFalse();
+		assertThat(world.willDieAt(stablePosition)).isFalse();
 
 	}
 

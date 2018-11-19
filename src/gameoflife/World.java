@@ -8,24 +8,32 @@ public class World {
 
 	private final Set<Position> alivePositions = new HashSet<>();
 
-	public World(Collection<Position> livePositions) {
+	private World(Collection<Position> livePositions) {
 		this.alivePositions.addAll(livePositions);
-	}
-
-	public World() {
-		// TODO Auto-generated constructor stub
 	}	
 
 	public boolean isAliveAt(Position position) {
 		return alivePositions.contains(position);
 	}
 
-	public boolean willCellDieAt(Position position) {
+	public boolean willDieAt(Position position) {
 
-		return countLiveNeighbors(position) < 2 || countLiveNeighbors(position) > 3;
+		return isUnderPopulated(position) || isOverPopulated(position);
+	}
+
+	private boolean isOverPopulated(Position position) {
+		return countLiveNeighbors(position) > 3;
+	}
+
+	private boolean isUnderPopulated(Position position) {
+		return countLiveNeighbors(position) < 2;
 	}	
 
 	public boolean willSpringToLife(Position position) {
+		return isPerfectlyPopulated(position);
+	}
+
+	private boolean isPerfectlyPopulated(Position position) {
 		return countLiveNeighbors(position) == 3;
 	}
 	
@@ -69,13 +77,17 @@ public class World {
 				nextgenAlivePositions.add(position);
 			}
 			
-			if(isAliveAt(position) && !willCellDieAt(position)) {
+			if(isAliveAt(position) && !willDieAt(position)) {
 				nextgenAlivePositions.add(position);
 			}					
 			
 		}
 		
 		examinedSoFar.add(position);
+	}
+
+	public static World withLivePositions(Collection<Position> livePositions) {
+		return new World(livePositions);
 	}
 
 
